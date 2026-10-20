@@ -45,21 +45,35 @@ if not exist ".env" (
 if not exist "data" mkdir "data"
 set "PORT=8095"
 for /f "tokens=1,* delims==" %%a in ('findstr /b /c:"PORT=" ".env"') do set "PORT=%%b"
-if "%ADMIN%"=="1" (
-  schtasks /end /tn "%NAME%" >nul 2>&1
-  schtasks /create /tn "%NAME%" /tr "\"%PYTHON%\" \"%DIR%\server.py\" --log" /sc onstart /ru SYSTEM /rl highest /f >nul
-  netsh advfirewall firewall delete rule name="%NAME%" >nul 2>&1
-  netsh advfirewall firewall add rule name="%NAME%" dir=in action=allow protocol=TCP localport=%PORT% >nul
-  schtasks /run /tn "%NAME%" >nul
-  echo 已注册开机自启任务 %NAME%，并放通防火墙端口 %PORT%。日志：data\server.log
-) else (
-  start "laobingshuo" /min "%PYTHON%" "%DIR%\server.py"
-  echo 未以管理员身份运行：已在最小化窗口中启动，没有注册开机自启。
-)
-echo 访问地址：http://本机IP:%PORT%
+if not "%ADMIN%"=="1" goto plainstart
+netsh advfirewall firewall delete rule name="%NAME%" >nul 2>&1
+netsh advfirewall firewall add rule name="%NAME%" dir=in action=allow protocol=TCP localport=%PORT% >nul 2>&1 || echo 警告：防火墙规则添加失败，其他电脑可能访问不到，请手动放通端口 %PORT%
+schtasks /end /tn "%NAME%" >nul 2>&1
+schtasks /create /tn "%NAME%" /tr "\"%PYTHON%\" \"%DIR%\server.py\" --log" /sc onstart /ru SYSTEM /rl highest /f >nul 2>&1 || goto taskfail
+schtasks /run /tn "%NAME%" >nul 2>&1 || goto taskfail
+echo 已注册开机自启任务 %NAME%。
+goto check
+
+:taskfail
+schtasks /delete /tn "%NAME%" /f >nul 2>&1
+echo 警告：开机自启任务注册失败，改为直接启动。服务器重启后需重新运行 deploy.cmd。
+goto startnow
+:plainstart
+echo 未以管理员身份运行：没有注册开机自启，也没有配置防火墙，直接启动。
+:startnow
+start "laobingshuo" /min "%PYTHON%" "%DIR%\server.py" --log
+
+:check
+"%PYTHON%" "%DIR%\server.py" check
+if errorlevel 1 goto startfail
+echo 启动成功。访问地址：http://本机IP:%PORT%
 echo 提示：第一个登录的人会自动成为助理。
 pause
 exit /b 0
+:startfail
+echo 启动失败，端口 %PORT% 没有响应（可能被占用）。查看日志：data\server.log
+pause
+exit /b 1
 
 :restart
 schtasks /query /tn "%NAME%" >nul 2>&1 || (echo 未安装，请先运行 deploy.cmd & exit /b 1)

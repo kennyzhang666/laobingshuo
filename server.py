@@ -637,7 +637,22 @@ def seed_demo() -> None:
     print(f"已导入 {len(demo)} 位示例老兵。")
 
 
+def check_running() -> None:
+    """部署脚本用：10 秒内本机端口能连上则退出码 0，否则 1。"""
+    import socket
+    import time
+    for _ in range(10):
+        try:
+            socket.create_connection(("127.0.0.1", PORT), 1).close()
+            sys.exit(0)
+        except OSError:
+            time.sleep(1)
+    sys.exit(1)
+
+
 def main() -> None:
+    if "check" in sys.argv[1:]:
+        return check_running()
     init_db()
     secret_key()
     if "seed-demo" in sys.argv[1:]:
