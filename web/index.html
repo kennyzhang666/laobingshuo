@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>老兵说 · 分组核心网控制开发部</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<canvas id="net"></canvas>
+<div class="glow-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="/"><i>说</i>老兵说</a>
+    <div class="links">
+      <a href="#gallery">老兵</a>
+      <a href="#how">流程</a>
+      <a href="#quotes">语录</a>
+      <span id="userArea" style="display:flex;gap:6px;align-items:center"></span>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <header class="hero wrap">
+    <div class="eyebrow">分组核心网控制开发部</div>
+    <h1 class="title" data-text="老兵说">老兵说</h1>
+    <p class="sub">部门老员工的经历和成长路径。</p>
+    <div class="cta">
+      <a class="btn btn-p" href="#gallery">查看老兵</a>
+      <button class="btn btn-g" id="randomBtn">随机看一位</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="s1">0</b><span>位老兵</span></div>
+      <div class="stat"><b id="s2">0</b><span>年累计司龄</span></div>
+      <div class="stat"><b id="s3">0</b><span>次交流</span></div>
+    </div>
+  </header>
+
+  <section id="gallery" class="reveal" style="padding-bottom:20px">
+    <div class="wrap"><div class="sec-h"><h2>老兵</h2><p>可拖动旋转，点照片看详情</p></div></div>
+    <div class="stage" id="stage">
+      <div class="floor"></div>
+      <div class="ring" id="ring"></div>
+    </div>
+  </section>
+
+  <section id="vets" class="wrap reveal" style="padding-top:20px">
+    <div class="toolbar">
+      <div class="chips" id="cats"></div>
+      <div class="search"><input class="inp" id="q" placeholder="搜索姓名或领域"></div>
+    </div>
+    <div class="chips tagbar" id="tagbar"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="how" class="wrap reveal">
+    <div class="sec-h"><h2>流程</h2></div>
+    <div class="steps">
+      <div class="step"><h4>选一位老兵</h4><p>看看履历和可以聊的话题</p></div>
+      <div class="step"><h4>提交申请</h4><p>选交流方式和大致时间</p></div>
+      <div class="step"><h4>部门安排</h4><p>确定时间地点，邮件通知双方</p></div>
+      <div class="step"><h4>见面聊</h4><p>咖啡、午饭、散步或线上</p></div>
+    </div>
+  </section>
+
+  <section id="quotes" class="reveal">
+    <div class="wrap"><div class="sec-h"><h2>老兵语录</h2></div></div>
+    <div class="marquee"><div class="track" id="t1"></div></div>
+    <div class="marquee"><div class="track rev" id="t2"></div></div>
+  </section>
+</main>
+
+<footer>老兵说 · 分组核心网控制开发部</footer>
+
+<div class="modal" id="modal"><div class="panel" id="panel"></div></div>
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer"></aside>
+<div class="toast" id="toast"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
