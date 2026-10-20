@@ -43,7 +43,7 @@ if not exist ".env" (
   echo 已生成 .env（默认配置，LDAP 与 AI 训战平台一致）
 )
 if not exist "data" mkdir "data"
-set "PORT=8090"
+set "PORT=8095"
 for /f "tokens=1,* delims==" %%a in ('findstr /b /c:"PORT=" ".env"') do set "PORT=%%b"
 if "%ADMIN%"=="1" (
   schtasks /end /tn "%NAME%" >nul 2>&1

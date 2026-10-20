@@ -57,7 +57,7 @@ if not DATA.is_absolute():
 PHOTOS = DATA / "photos"
 DB_PATH = DATA / "laobing.db"
 HOST = os.environ.get("HOST", "0.0.0.0")
-PORT = int(os.environ.get("PORT", "8090"))
+PORT = int(os.environ.get("PORT", "8095"))
 SESSION_SECONDS = int(os.environ.get("SESSION_DAYS", "7")) * 86400
 COOKIE = "lbs_session"
 LDAP = ldap_auth.LdapConfig.from_env()
